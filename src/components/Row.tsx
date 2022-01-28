@@ -17,20 +17,25 @@ type Movie = {
 };
 
 export const Row = ({ title, fetchUrl } :Props) => {
-  const [ movie, setMovie ] = useState<Movie[]>([]);
+  const [ movies, setMovie ] = useState<Movie[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      const response = axios.get(fetchUrl);
+      const response = await axios.get(fetchUrl);
       setMovie(response.data.results);
       return response;
     }
     fetchData();
   }, [fetchUrl]);
 
-  console.log(movie);
+  console.log(movies);
 
   return (
-    <div className="Row"></div>
+    <div className="Row">
+      <h2>{ title }</h2>
+      <div className="Row-posters">
+        
+      </div>
+    </div>
   );
 } 
