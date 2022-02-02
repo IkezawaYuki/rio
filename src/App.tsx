@@ -12,12 +12,12 @@ function App() {
   return (
     <div className="App">
       <img src={logo} className="App-logo" alt="logo" />
-      <Nav />
+      {/* <Nav />
       <Banner />
       <Row
         title="NETFLIX ORIGUINALS"
         fetchUrl={requests.feachNetflixOriginals}
-      />
+      /> */}
     </div>
   )
 }
