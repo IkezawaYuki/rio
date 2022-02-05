@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from './logo.svg';
 
 import { Nav } from "./components/Nav";
@@ -6,23 +6,28 @@ import { Row } from './components/Row';
 import { Banner } from './components/Banner';
 import { requests } from "./requests.js";
 
-const App = (props) => {
-  const [name, setName] = useState(props.name);
-  const [price, setPrice] = useState(props.price);
+const App = (props: Props) => {
+  const [state, setState] = useState(props);
+  const { name, price } = state;
 
-  const reset = () => {
-    setPrice(props.price);
-    setName(props.name);
-  }
+  useEffect(() => {
+    console.log("useEffect is invoked");
+  }, [name])
+
   return (
     <>
-      <p>現在の{name}は、{price}円です</p>
-      <button onClick={() => setPrice(price + 1)}>+1</button>
-      <button onClick={() => setPrice(price - 1)}>-1</button>
-      <button onClick={reset}>Reset</button>
-      <input value={name} type="text" onChange={e => setName(e.target.value)}/>
+      <p>現在の{name}は、{price}円です.</p>
+      <button onClick={() => setState({...state, price: price + 1})}>+1</button>
+      <button onClick={() => setState({...state, price: price - 1})}>-1</button>
+      <button onClick={() => setState(props)}>Reset</button>
+      <input value={state.name} type="text" onChange={e => setState({...state, name: e.target.value})}/>
     </>
   )
+}
+
+type Props = {
+  name: string,
+  price: number
 }
 
 App.defaultProps = {
