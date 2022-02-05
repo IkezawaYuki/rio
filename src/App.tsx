@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './logo.svg';
 
 import { Nav } from "./components/Nav";
@@ -16,11 +17,37 @@ const App = (props: Props) => {
 
   return (
     <>
-      <p>現在の{name}は、{price}円です.</p>
-      <button onClick={() => setState({...state, price: price + 1})}>+1</button>
-      <button onClick={() => setState({...state, price: price - 1})}>-1</button>
-      <button onClick={() => setState(props)}>Reset</button>
-      <input value={state.name} type="text" onChange={e => setState({...state, name: e.target.value})}/>
+      <div className='container-fluid'>
+        <h4>イベント作成フォーム</h4>
+        <form>
+          <div className="mb-3">
+            <label htmlFor="formEventTitle" className="form-label">タイトル</label>
+            <input type="text" className="form-control" id="formEventTitle" />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="formEventBody" className="form-label">ボディー</label>
+            <textarea className="form-control" id="formEventBody" />
+          </div>
+          <button className="btn btn-primary">イベントを作成する</button>
+          <button className="btn btn-danger">全てのイベントを削除する</button>
+          <button className="btn btn-primary">Submit</button>
+        </form>
+
+        <h4>イベント一覧</h4>
+        <table className='table tabel-hover'>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>タイトル</th>
+              <th>ボディー</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
     </>
   )
 }
