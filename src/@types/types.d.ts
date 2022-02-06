@@ -4,7 +4,6 @@ type RioEvent = {
   id: number
 }
 
-
 type Action = {
   type: string,
   title: string,
