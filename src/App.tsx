@@ -32,6 +32,9 @@ const App = (props: Props) => {
 
   const handleClickDeleteAllButton = e => {
     e.preventDefault();
+    dispach({
+      type: "DELETE_ALL_EVENTS"
+    })
   }
 
 
