@@ -9,7 +9,7 @@ import { requests } from "./requests.js";
 import Event from "./components/Event";
 import reducer from "./reducers";
 
-const App = (props: Props) => {
+const App = (props) => {
   // const [state, setState] = useState(props);
   // const { name, price } = state;
   const [title, setTitle] = useState("");
@@ -28,18 +28,21 @@ const App = (props: Props) => {
       title,
       body
     })
+    setTitle("");
+    setBody("");
   }
 
   const handleClickDeleteAllButton = e => {
     e.preventDefault();
+    if (!confirm("本当に全てのイベントを削除してもいいですか")){
+      return;
+    }
     dispach({
       type: "DELETE_ALL_EVENTS"
     })
   }
 
-
-
-  console.log({state});
+  const unCreatable = title === "" || body === "";
 
   return (
     <>
@@ -54,8 +57,8 @@ const App = (props: Props) => {
             <label htmlFor="formEventBody" className="form-label">ボディー</label>
             <textarea value={body} onChange={e => setBody(e.target.value)} className="form-control" id="formEventBody" />
           </div>
-          <button className="btn btn-primary" onClick={addEvent}>イベントを作成する</button>
-          <button className="btn btn-danger" onClick={handleClickDeleteAllButton}>全てのイベントを削除する</button>
+          <button className="btn btn-primary" onClick={addEvent} disabled={unCreatable}>イベントを作成する</button>
+          <button className="btn btn-danger" onClick={handleClickDeleteAllButton} disabled={state.length === 0}>全てのイベントを削除する</button>
           <button className="btn btn-primary">Submit</button>
         </form>
 
@@ -78,10 +81,6 @@ const App = (props: Props) => {
   )
 }
 
-type Props = {
-  name: string,
-  price: number
-}
 
 App.defaultProps = {
   name: "サンプル",
