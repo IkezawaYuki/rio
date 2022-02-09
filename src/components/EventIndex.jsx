@@ -2,7 +2,6 @@ import React from "react";
 import Event from "./Event";
 
 const EventIndex = ({state, dispatch}) => {
-  console.log({state});
   return (
     <>
       <h4>イベント一覧</h4>
