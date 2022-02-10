@@ -9,16 +9,19 @@ import { requests } from "./requests.js";
 import EventForm from "./components/EventForm";
 import reducer from "./reducers";
 import EventIndex from './components/EventIndex';
+import AppContext from "./contexts/AppContext";
 
+console.log(AppContext);
 const App = () => {
+
   const [state, dispatch] = useReducer(reducer, []);
   return (
-    <>
+    <AppContext.Provider value={"Hello, I am a provider"}>
       <div className='container-fluid'>
         <EventForm state={state} dispatch={dispatch}/>
         <EventIndex state={state} dispatch={dispatch} />
       </div>
-    </>
+    </AppContext.Provider>
   )
 }
 
