@@ -7,19 +7,21 @@ import { Row } from './components/Row';
 import { Banner } from './components/Banner';
 import { requests } from "./requests.js";
 import EventForm from "./components/EventForm";
-import reducer from "./reducers";
+import reducer from "./reducers/index";
 import EventIndex from './components/EventIndex';
 import AppContext from "./contexts/AppContext";
 
-console.log(AppContext);
-const App = () => {
 
-  const [state, dispatch] = useReducer(reducer, []);
+const App = () => {
+  const initialtState = {
+    events: []
+  }
+  const [state, dispatch] = useReducer(reducer, initialtState);
   return (
-    <AppContext.Provider value={"Hello, I am a provider"}>
+    <AppContext.Provider value={{ state, dispatch }}>
       <div className='container-fluid'>
-        <EventForm state={state} dispatch={dispatch}/>
-        <EventIndex state={state} dispatch={dispatch} />
+        <EventForm />
+        <EventIndex />
       </div>
     </AppContext.Provider>
   )
