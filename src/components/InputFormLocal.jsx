@@ -31,7 +31,7 @@ export default function SignInSide() {
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
     console.log({
-      email: data.get('name'),
+      name: data.get('name'),
     });
   };
 
