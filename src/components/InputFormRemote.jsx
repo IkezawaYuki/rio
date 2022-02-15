@@ -24,7 +24,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function SignInSide({ remotePeerName, setRemotePeerName }) {
   const label = "相手の名前";
   const handleSubmit = (event) => {
     event.preventDefault();

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -24,8 +24,14 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide({ localPeerName, setLocalPerrName }) {
+export default function SignInSide({ localPeerName, setLocalPeerName }) {
   const label = "あなたの名前";
+
+  const [name, setName] = useState("");
+  const [disabled, setDisabled] = useState(true);
+
+  console.log(name);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -33,6 +39,15 @@ export default function SignInSide({ localPeerName, setLocalPerrName }) {
     console.log({
       name: data.get('name'),
     });
+  };
+
+  useEffect(() => {
+    const disabled = name.length === 0;
+    setDisabled(disabled);
+  }, [name]);
+
+  const initializeLocalPeer = () => {
+    setLocalPeerName(name);
   };
 
   return (
@@ -74,12 +89,15 @@ export default function SignInSide({ localPeerName, setLocalPerrName }) {
                 label={label}
                 name="name"
                 autoFocus
+                onChange={(e) => setName(e.target.value)}
+                value={name}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={disabled}
               >
                 決定
               </Button>

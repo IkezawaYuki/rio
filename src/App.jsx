@@ -17,7 +17,7 @@ const getMedia = async () => {
 }
 
 const App = () => {
-  getMedia();
+  // getMedia();
   const [localPeerName, setLocalPeerName] = useState("");
   const [remotePeerName, setRemotePeerName] = useState("");
 
