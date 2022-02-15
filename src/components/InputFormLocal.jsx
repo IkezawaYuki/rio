@@ -24,7 +24,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function SignInSide({ localPeerName, setLocalPerrName }) {
   const label = "あなたの名前";
   const handleSubmit = (event) => {
     event.preventDefault();
