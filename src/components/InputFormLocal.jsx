@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Copyright(props) {
+const Copyright = (props) => {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -29,16 +29,13 @@ export default function SignInSide({ localPeerName, setLocalPeerName }) {
 
   const [name, setName] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [isComposed, setIsComposed] = useState(false);
 
   console.log(name);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      name: data.get('name'),
-    });
+    initializeLocalPeer();
   };
 
   useEffect(() => {
@@ -47,6 +44,7 @@ export default function SignInSide({ localPeerName, setLocalPeerName }) {
   }, [name]);
 
   const initializeLocalPeer = () => {
+    console.log("initialize");
     setLocalPeerName(name);
   };
 
@@ -90,6 +88,18 @@ export default function SignInSide({ localPeerName, setLocalPeerName }) {
                 name="name"
                 autoFocus
                 onChange={(e) => setName(e.target.value)}
+                onCompositionEnd={() => {setIsComposed(false)}}
+                onCompositionStart={() => {setIsComposed(true)}}
+                onKeyDown={(e) => {
+                  if (e.target.value === "" || isComposed) {
+                    return;
+                  }
+                  if (e.key === "Enter") {
+                    console.log("Enter");
+                    initializeLocalPeer();
+                    e.preventDefault();
+                  }
+                }}
                 value={name}
               />
               <Button
