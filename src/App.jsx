@@ -24,7 +24,7 @@ const App = () => {
   return (
     <>
       <InputFormLocal localPeerName={localPeerName} setLocalPeerName={setLocalPeerName} />
-      <InputFormRemote remotePeerName={remotePeerName} setRemotePeerName={setRemotePeerName}/>
+      <InputFormRemote localPeerName={localPeerName} remotePeerName={remotePeerName} setRemotePeerName={setRemotePeerName}/>
     </>
   )
 }

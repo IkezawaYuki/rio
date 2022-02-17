@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -24,16 +24,28 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide({ remotePeerName, setRemotePeerName }) {
+export default function SignInSide({ localPeerName, remotePeerName, setRemotePeerName }) {
   const label = "相手の名前";
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      name: data.get('name'),
-    });
+    initializeRemotePeer();
   };
+  const [name, setName] = useState("");
+  const [disabled, setDisabled] = useState(true);
+  const [isComposed, setIsComposed] = useState(false);
+
+  useEffect(() => {
+    const disabled = name.length === 0;
+    setDisabled(disabled);
+  }, [name]);
+
+  const initializeRemotePeer = useCallback(() => {
+    console.log("initialize");
+    setRemotePeerName(name);
+  }, [name, setRemotePeerName]);
+
+  if (localPeerName === "") return <></>;
+  if (remotePeerName !== "") return <></>
 
   return (
     <ThemeProvider theme={theme}>
@@ -74,12 +86,28 @@ export default function SignInSide({ remotePeerName, setRemotePeerName }) {
                 label={label}
                 name="name"
                 autoFocus
+                onChange={(e) => setName(e.target.value)}
+                onCompositionEnd={() => {setIsComposed(false)}}
+                onCompositionStart={() => {setIsComposed(true)}}
+                onKeyDown={(e) => {
+                  if (e.target.value === "" || isComposed) {
+                    return;
+                  }
+                  if (e.key === "Enter") {
+                    console.log("Enter");
+                    initializeRemotePeer();
+                    e.preventDefault();
+                  }
+                }}
+                value={name}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={disabled}
+                onClick={(e) => initializeRemotePeer(e)}
               >
                 決定
               </Button>

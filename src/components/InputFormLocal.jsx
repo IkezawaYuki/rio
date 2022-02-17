@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -43,10 +43,12 @@ export default function SignInSide({ localPeerName, setLocalPeerName }) {
     setDisabled(disabled);
   }, [name]);
 
-  const initializeLocalPeer = () => {
+  const initializeLocalPeer = useCallback(() => {
     console.log("initialize");
     setLocalPeerName(name);
-  };
+  }, [name, setLocalPeerName]);
+
+  if (localPeerName !== "") return <></>;
 
   return (
     <ThemeProvider theme={theme}>
@@ -108,6 +110,7 @@ export default function SignInSide({ localPeerName, setLocalPeerName }) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 disabled={disabled}
+                onClick={(e) => initializeLocalPeer(e)}
               >
                 決定
               </Button>
