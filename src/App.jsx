@@ -24,9 +24,19 @@ const App = () => {
 
   return (
     <>
-      <InputFormLocal localPeerName={localPeerName} setLocalPeerName={setLocalPeerName} />
-      <InputFormRemote localPeerName={localPeerName} remotePeerName={remotePeerName} setRemotePeerName={setRemotePeerName}/>
-      <VideoArea />
+      <InputFormLocal 
+        localPeerName={localPeerName} 
+        setLocalPeerName={setLocalPeerName} 
+      />
+      <InputFormRemote 
+        localPeerName={localPeerName} 
+        remotePeerName={remotePeerName} 
+        setRemotePeerName={setRemotePeerName}
+      />
+      <VideoArea 
+        localPeerName={localPeerName} 
+        remotePeerName={remotePeerName} 
+      />
     </>
   )
 }

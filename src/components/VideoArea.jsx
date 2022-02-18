@@ -3,6 +3,9 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import VideoLocal from "./VideoLocal";
+import VideoRemote from "./VideoRemote";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -12,15 +15,16 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const VideoArea = () => {
+const VideoArea = ({ localPeerName, remotePeerName }) => {
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={3}>
         <Grid item xs={6} md={6}>
-          <Item>xs=12 md=6</Item>
+          <VideoLocal localPeerName={localPeerName} />
         </Grid>
         <Grid item xs={6} md={6}>
-          <Item>xs=12 md=6</Item>
+          <VideoRemote localPeerName={remotePeerName} />
         </Grid>
       </Grid>
     </Box>
