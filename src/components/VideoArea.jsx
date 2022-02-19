@@ -21,7 +21,7 @@ const VideoArea = ({ localPeerName, remotePeerName }) => {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={3}>
         <Grid item xs={6} md={6}>
-          <VideoLocal localPeerName={localPeerName} />
+          <VideoLocal name={localPeerName} />
         </Grid>
         <Grid item xs={6} md={6}>
           <VideoRemote localPeerName={remotePeerName} />
