@@ -24,7 +24,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide({ localPeerName, remotePeerName, setRemotePeerName }) {
+export default function SignInSide({ rtcClient }) {
   const label = "相手の名前";
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -41,11 +41,11 @@ export default function SignInSide({ localPeerName, remotePeerName, setRemotePee
 
   const initializeRemotePeer = useCallback(() => {
     console.log("initialize");
-    setRemotePeerName(name);
-  }, [name, setRemotePeerName]);
+    rtcClient.remotePeerName = name;
+  }, [name, rtcClient]);
 
-  if (localPeerName === "") return <></>;
-  if (remotePeerName !== "") return <></>
+  if (rtcClient.localPeerName === "") return <></>;
+  if (rtcClient.remotePeerName !== "") return <></>
 
   return (
     <ThemeProvider theme={theme}>
