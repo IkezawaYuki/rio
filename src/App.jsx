@@ -1,18 +1,17 @@
 import React from "react";
-import InputFormLocal from "./components/InputFormLocal";
-import InputFormRemote from "./components/InputFormRemote";
+
+import useRtcClient from "./components/hooks/useRtcClient";
 import VideoArea from "./components/VideoArea";
-import RtcClient from "./utils/RtcClient";
+import InputForms from "./components/InputForms";
 
 
 const App = () => {
-  const rtcClient = new RtcClient();
+  const rtcClient = useRtcClient();
 
   return (
     <>
-      <InputFormLocal rtcClient = {rtcClient}/>
-      <InputFormRemote rtcClient = {rtcClient}/>
-      <VideoArea rtcClient = {rtcClient} />
+      <InputForms rtcClient={rtcClient} />
+      <VideoArea rtcClient={rtcClient} />
     </>
   )
 }

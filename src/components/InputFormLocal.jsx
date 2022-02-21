@@ -24,7 +24,7 @@ const Copyright = (props) => {
 
 const theme = createTheme();
 
-export default function SignInSide({ rtcClient }) {
+export default function SignInSide({ rtcClient, setRtcClient }) {
   const label = "あなたの名前";
 
   const [name, setName] = useState("");
@@ -45,8 +45,8 @@ export default function SignInSide({ rtcClient }) {
 
   const initializeLocalPeer = useCallback(() => {
     rtcClient.localPeerName = name;
-    console.log({rtcClient});
-  }, [name, rtcClient]);
+    setRtcClient(rtcClient);
+  }, [name, rtcClient, setRtcClient]);
 
   console.log({rtcClient});
 

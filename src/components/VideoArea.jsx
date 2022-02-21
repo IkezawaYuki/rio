@@ -17,6 +17,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const VideoArea = ({ rtcClient }) => {
 
+  if (rtcClient === null) return <></>;
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={3}>
