@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Video from "./Video";
 
 
-const VideoRemote = ({ name }) => {
+const VideoRemote = ({ rtcClient }) => {
   const videoRef = null;
   // const currentVideoRef = videoRef.current;
 
@@ -26,7 +26,7 @@ const VideoRemote = ({ name }) => {
 
   return (
     <>
-      <Video isLocal={false} videoRef={videoRef} name={name}/>
+      <Video isLocal={false} videoRef={videoRef} name={rtcClient.remotePeerName}/>
     </>
   )
 }
