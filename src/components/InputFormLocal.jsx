@@ -44,8 +44,7 @@ export default function SignInSide({ rtcClient }) {
   }, [name]);
 
   const initializeLocalPeer = useCallback(() => {
-    rtcClient.localPeerName = name;
-    rtcClient.setRtcClient(rtcClient);
+    rtcClient.startListening(name);
   }, [name, rtcClient]);
 
   console.log({rtcClient});
