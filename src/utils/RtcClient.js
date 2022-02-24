@@ -1,3 +1,5 @@
+import FirebaseSignallingClient from "./FirebaseSignallingClient";
+import { ref, onValue } from "firebase/database";
 
 export default class RtcClient {
   constructor(setRtcClient) {
@@ -5,6 +7,7 @@ export default class RtcClient {
       iceServers: [{urls: "stun:stun.stunprotocol.org"}],
     }
     this.rtcPeerConnection = new RTCPeerConnection(config);
+    this.firebaseSignallingClient = new FirebaseSignallingClient();
     this.localPeerName = "";
     this.remotePeerName = "";
     this._setRtcClient = setRtcClient;
@@ -27,5 +30,9 @@ export default class RtcClient {
   startListening(localPeerName) {
     this.localPeerName = localPeerName;
     this.setRtcClient();
+    onValue(ref(this.firebaseSignallingClient.database, localPeerName), (snapshot) => {
+      const data = snapshot.val();
+
+    });
   }
 }
