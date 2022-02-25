@@ -27,6 +27,18 @@ export default class RtcClient {
     }
   }
 
+  async setMediaStream() {
+    await this.getMediaStream();
+    this.addTracks();
+    this.setRtcClient();
+  }
+
+  addTracks() {
+    this.addAudioTrack();
+    this.addVideoTrack();
+  }
+  
+
   startListening(localPeerName) {
     this.localPeerName = localPeerName;
     this.setRtcClient();
