@@ -40,8 +40,7 @@ export default function SignInSide({ rtcClient }) {
   }, [name]);
 
   const initializeRemotePeer = useCallback(() => {
-    rtcClient.remotePeerName = name;
-    rtcClient.setRtcClient(rtcClient);
+    rtcClient.connect(name);
   }, [name, rtcClient]);
 
   if (rtcClient.localPeerName === "") return <></>;

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import Video from "./Video";
 
 
 const VideoRemote = ({ rtcClient }) => {
-  const videoRef = null;
+  const videoRef = rtcClient.remoteVideoRef;
   // const currentVideoRef = videoRef.current;
 
   // useEffect(() => {
