@@ -55,23 +55,85 @@ export default class RtcClient {
     return this.mediaStream.getVideoTracks()[0];
   }
 
+  async offer() {
+    const sessionDescription = await this.createOffer();
+    await this.setLocalDescription(sessionDescription);
+    await this.sendOffer();
+  }
+  
+  async createOffer() {
+    try {
+      return await this.rtcPeerConnection.createOffer();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async setLocalDescription(sessionDescription) {
+    try {
+      await this.rtcPeerConnection.setLocalDescription(sessionDescription);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async sendOffer() {
+    this.firebaseSignallingClient.setPeerNames(
+      this.localPeerName,
+      this.remotePeerName
+    );
+    console.log(this.rtcPeerConnection.localDescription.toJSON());
+    await this.firebaseSignallingClient.sendOffer(this.localDescription);
+  }
+
   setOntrack() {
     this.rtcPeerConnection.ontrack = (rtcTrackEvent) => {
-      if (rtcTrackEvent.track.kind !== "vide") {
+      if (rtcTrackEvent.track.kind !== "video") {
         return;
       }
       const remoteMediaStream = rtcTrackEvent.streams[0];
       this.remoteVideoRef.current.srcObject = remoteMediaStream;
       this.setRtcClient();
-    }
+    };
     this.setRtcClient();
   }
 
-  connect(remotePeerName) {
+  async answer(sender, sessionDescription) {
+    try {
+      this.remotePeerName = sender;
+      this.setOnicecandidateCallback();
+      this.setOntrack();
+      await this.setRemoteDescription(sessionDescription);
+      const answer = await this.rtcPeerConnection.createAnswer();
+      await this.rtcPeerConnection.setLocalDescription(answer);
+      await this.sendAnswer();
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  async connect(remotePeerName) {
     this.remotePeerName = remotePeerName;
     this.setOnicecandidateCallback();
     this.setOntrack();
+    await this.offer();
     this.setRtcClient();
+  }
+
+  async setRemoteDescription(sessionDescription) {
+    return await this.rtcPeerConnection.setRemoteDescription(sessionDescription);
+  }
+
+  async sendAnswer() {
+    this.firebaseSignallingClient.setPeerNames(
+      this.localPeerName,
+      this.remotePeerName
+    );
+    await this.firebaseSignallingClient.sendAnswer(this.localDescription);
+  }
+
+  get localDescription() {
+    return this.rtcPeerConnection.localDescription.toJSON();
   }
 
   setOnicecandidateCallback() {
@@ -85,9 +147,18 @@ export default class RtcClient {
   startListening(localPeerName) {
     this.localPeerName = localPeerName;
     this.setRtcClient();
-    onValue(ref(this.firebaseSignallingClient.database, localPeerName), (snapshot) => {
+    onValue(ref(this.firebaseSignallingClient.database, localPeerName), async (snapshot) => {
       const data = snapshot.val();
-      
+      if (data === null) return;
+
+      const { sender, sessionDescription, type } = data;
+      switch(type) {
+        case "offer":
+          await this.answer(sender, sessionDescription);
+          break;
+        default:
+          break;
+      }
     });
   }
 }

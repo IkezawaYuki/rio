@@ -27,8 +27,7 @@ const theme = createTheme();
 export default function SignInSide({ rtcClient }) {
   const label = "相手の名前";
   const handleSubmit = (event) => {
-    event.preventDefault();
-    initializeRemotePeer();
+    initializeRemotePeer(event);
   };
   const [name, setName] = useState("");
   const [disabled, setDisabled] = useState(true);
@@ -39,8 +38,9 @@ export default function SignInSide({ rtcClient }) {
     setDisabled(disabled);
   }, [name]);
 
-  const initializeRemotePeer = useCallback(() => {
-    rtcClient.connect(name);
+  const initializeRemotePeer = useCallback(async (event) => {
+    event.preventDefault();
+    await rtcClient.connect(name);
   }, [name, rtcClient]);
 
   if (rtcClient.localPeerName === "") return <></>;
@@ -88,14 +88,12 @@ export default function SignInSide({ rtcClient }) {
                 onChange={(e) => setName(e.target.value)}
                 onCompositionEnd={() => {setIsComposed(false)}}
                 onCompositionStart={() => {setIsComposed(true)}}
-                onKeyDown={(e) => {
+                onKeyDown={async (e) => {
                   if (e.target.value === "" || isComposed) {
                     return;
                   }
                   if (e.key === "Enter") {
-                    console.log("Enter");
-                    initializeRemotePeer();
-                    e.preventDefault();
+                    await initializeRemotePeer(e);
                   }
                 }}
                 value={name}
@@ -106,7 +104,9 @@ export default function SignInSide({ rtcClient }) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 disabled={disabled}
-                onClick={(e) => initializeRemotePeer(e)}
+                onClick={async (e) => {
+                  await initializeRemotePeer(e);
+                }}
               >
                 決定
               </Button>

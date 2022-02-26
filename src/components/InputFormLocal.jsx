@@ -31,8 +31,6 @@ export default function SignInSide({ rtcClient }) {
   const [disabled, setDisabled] = useState(true);
   const [isComposed, setIsComposed] = useState(false);
 
-  console.log(name);
-
   const handleSubmit = (event) => {
     event.preventDefault();
     initializeLocalPeer();
@@ -46,8 +44,6 @@ export default function SignInSide({ rtcClient }) {
   const initializeLocalPeer = useCallback(() => {
     rtcClient.startListening(name);
   }, [name, rtcClient]);
-
-  console.log({rtcClient});
 
   if (rtcClient.localPeerName !== "") return <></>;
 
