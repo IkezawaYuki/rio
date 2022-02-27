@@ -32,8 +32,7 @@ export default function SignInSide({ rtcClient }) {
   const [isComposed, setIsComposed] = useState(false);
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    initializeLocalPeer();
+    initializeLocalPeer(event);
   };
 
   useEffect(() => {
@@ -41,8 +40,9 @@ export default function SignInSide({ rtcClient }) {
     setDisabled(disabled);
   }, [name]);
 
-  const initializeLocalPeer = useCallback(() => {
-    rtcClient.startListening(name);
+  const initializeLocalPeer = useCallback(async (event) => {
+    event.preventDefault();
+    await rtcClient.startListening(name);
   }, [name, rtcClient]);
 
   if (rtcClient.localPeerName !== "") return <></>;
@@ -89,14 +89,12 @@ export default function SignInSide({ rtcClient }) {
                 onChange={(e) => setName(e.target.value)}
                 onCompositionEnd={() => {setIsComposed(false)}}
                 onCompositionStart={() => {setIsComposed(true)}}
-                onKeyDown={(e) => {
+                onKeyDown={async (e) => {
                   if (e.target.value === "" || isComposed) {
                     return;
                   }
                   if (e.key === "Enter") {
-                    console.log("Enter");
-                    initializeLocalPeer();
-                    e.preventDefault();
+                    await initializeLocalPeer(e);
                   }
                 }}
                 value={name}
@@ -107,7 +105,7 @@ export default function SignInSide({ rtcClient }) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 disabled={disabled}
-                onClick={(e) => initializeLocalPeer(e)}
+                onClick={async (e) => await initializeLocalPeer(e)}
               >
                 決定
               </Button>
