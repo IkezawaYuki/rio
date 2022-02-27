@@ -144,10 +144,20 @@ export default class RtcClient {
     return this.rtcPeerConnection.localDescription.toJSON();
   }
 
-  setOnicecandidateCallback() {
-    this.rtcPeerConnection.onicecandidate = ({ candidate }) => {
+  async addIceCandidate(candidate) {
+    try {
+      const iceCandidate = new RTCIceCandidate(candidate);
+      await this.rtcPeerConnection.addIceCandidate(iceCandidate);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async setOnicecandidateCallback() {
+    this.rtcPeerConnection.onicecandidate = async ({ candidate }) => {
       if (candidate) {
-        // TODO: remoteへ
+        console.log({candidate});
+        await this.firebaseSignallingClient.sendCandidate(candidate.toJSON());
       }
     }
   }
@@ -160,14 +170,17 @@ export default class RtcClient {
       const data = snapshot.val();
       if (data === null) return;
 
-      const { sender, sessionDescription, type } = data;
+      const { candidate, sender, sessionDescription, type } = data;
       switch(type) {
         case "offer":
           await this.answer(sender, sessionDescription);
           break;
         case "answer":
           await this.saveReceivedSessionDescription(sessionDescription);
+        case "candidate":
+          await this.addIceCandidate(candidate);
         default:
+          this.setRtcClient();
           break;
       }
     });
