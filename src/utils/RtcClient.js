@@ -1,6 +1,8 @@
 import FirebaseSignallingClient from "./FirebaseSignallingClient";
 import { ref, onValue } from "firebase/database";
 
+const INITIAL_AUDIO_ENABLED = false;
+
 export default class RtcClient {
   constructor(remoteVideoRef, setRtcClient) {
     const config = {
@@ -13,6 +15,10 @@ export default class RtcClient {
     this.remoteVideoRef = remoteVideoRef;
     this._setRtcClient = setRtcClient;
     this.mediaStream = null;
+  }
+
+  get initialAudioMuted() {
+    return !INITIAL_AUDIO_ENABLED;
   }
 
   setRtcClient() {
@@ -40,6 +46,7 @@ export default class RtcClient {
   }
 
   addAudioTrack() {
+    this.audioTrack.enabled = INITIAL_AUDIO_ENABLED;
     this.rtcPeerConnection.addTrack(this.audioTrack, this.mediaStream);
   }
 
@@ -53,6 +60,11 @@ export default class RtcClient {
 
   get videoTrack() {
     return this.mediaStream.getVideoTracks()[0];
+  }
+
+  toggleAudio() {
+    this.audioTrack.enabled = !this.audioTrack.enabled;
+    this.setRtcClient();
   }
 
   async offer() {
@@ -82,7 +94,6 @@ export default class RtcClient {
       this.localPeerName,
       this.remotePeerName
     );
-    console.log(this.rtcPeerConnection.localDescription.toJSON());
     await this.firebaseSignallingClient.sendOffer(this.localDescription);
   }
 
@@ -156,7 +167,6 @@ export default class RtcClient {
   async setOnicecandidateCallback() {
     this.rtcPeerConnection.onicecandidate = async ({ candidate }) => {
       if (candidate) {
-        console.log({candidate});
         await this.firebaseSignallingClient.sendCandidate(candidate.toJSON());
       }
     }

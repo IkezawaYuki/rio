@@ -50,7 +50,6 @@ export const Row = ({ title, fetchUrl, isLargeRow } :Props) => {
     },
   }
 
-  console.log(movies);
   const handleClick = async (movie: Movie) => {
     if (trailerUrl) {
       setTrailerUrl("")

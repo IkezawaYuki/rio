@@ -26,7 +26,12 @@ const VideoRemote = ({ rtcClient }) => {
 
   return (
     <>
-      <Video isLocal={false} videoRef={videoRef} name={rtcClient.remotePeerName}/>
+      <Video 
+        isLocal={false} 
+        videoRef={videoRef} 
+        rtcClient={trcClient}
+        name={rtcClient.remotePeerName}
+      />
     </>
   )
 }
