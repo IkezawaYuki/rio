@@ -6,11 +6,13 @@ import Typography from '@mui/material/Typography';
 
 import VolumeButton from "./VolumeButton";
 import useDimensions from './hooks/useDimensions';
+import AudioAnalyser from './AudioAnalyser';
 
-const Video = ({ isLocal ,name, videoRef, rtcClient }) => {
+const Video = ({ isLocal, name, videoRef, rtcClient }) => {
   const [muted, setMuted] = useState(rtcClient.initialAudioMuted);
   const refCard = useRef(null);
   const dimensionsCard = useDimensions(refCard);
+
 
   return (
     <Card ref={refCard}>
@@ -32,6 +34,9 @@ const Video = ({ isLocal ,name, videoRef, rtcClient }) => {
           rtcClient={rtcClient}
           setMuted={setMuted} 
         />
+        {!muted && videoRef.current && videoRef.current.srcObject && ( 
+          <AudioAnalyser audio={videoRef.current.srcObject} />
+        )}
       </CardActions>
     </Card>
   );
